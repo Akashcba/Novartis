@@ -5,13 +5,15 @@ from sklearn import preprocessing
 
 from sklearn import ensemble
 from sklearn import metrics
-
+import matplotlib.pyplot as plt
 from . import dispatcher
 import joblib
 
 TRAINING_DATA = os.environ.get("TRAINING_DATA")
 #TEST_DATA = os.environ.get("TEST_DATA")
 FOLD = int(os.environ.get("FOLD"))
+target = os.environ.get("TARGET_COLS")
+id = os.environ.get("ID_COLS")
 MODEL = os.environ.get("MODEL")
 
 Fold_Mapping = {
@@ -31,9 +33,11 @@ if __name__ == "__main__":
     #df_test = pd.read_csv(TEST_DATA)
     train_df = df[df.kfold.isin(Fold_Mapping.get(FOLD))].reset_index(drop=True)
     valid_df = df[df.kfold==FOLD].reset_index(drop=True)
+    
+    ytrain = train_df[target].values
+    yvalid = valid_df[target].values
 
-    ytrain = train_df.target.values
-    yvalid = valid_df.target.values
+    '''
     print("Do you have an id column in your dataset ?")
     res = input("> Enter Y if you have an id varibale in your dataset.")
     if res=='Y' or res == 'y':
@@ -49,7 +53,7 @@ if __name__ == "__main__":
             raise "target variable name match Error.!"
         res=None
     print("")
-
+    '''
     train_df = train_df.drop([id, target, "kfold"], axis=1)
     valid_df = valid_df.drop([id, target, "kfold"], axis=1)
 
@@ -75,9 +79,11 @@ if __name__ == "__main__":
     # Data is ready to train
     clf = dispatcher.MODELS[MODEL]
     clf.fit(train_df, ytrain)
-    preds = clf.predict_proba(valid_df)[:, 1]
+    #preds = clf.predict_proba(valid_df)[:, 1]
+    preds = clf.predict(valid_df)#[:, 1]
     #print(preds)
-    print("AUC_Score on validation set : ", metrics.roc_auc_score(yvalid, preds))
+    print("F1_Score on validation set : ", metrics.f1_score(yvalid, preds))
+    print("AUC Score : ",metrics.roc_auc_score(yvalid, preds) )
 
     ## Storing the data for predict.py
     print("Compeleted")

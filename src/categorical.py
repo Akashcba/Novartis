@@ -9,19 +9,19 @@ import joblib
 import time
 from sklearn import preprocessing
 
-from colorama import Fore, Style, init
-init()
+#from colorama import Fore, Style, init
+#init()
 
 TRAINING_DATA = os.environ.get("TRAINING_DATA")
 #TESTING_DATA = os.environ.get("TEST_DATA")
 TYPE = os.environ.get("TYPE")
 NA = os.environ.get("NA")
 PATH = os.environ.get("MODEL_PATH")
-
+'''
 class Warning(Exception):
     def __init__(self, message):
         super().__init__( Fore.RED + message)
-
+'''
 
 
 class CategoricalFeatures:
@@ -40,10 +40,11 @@ class CategoricalFeatures:
         self.binary_encoders = dict()
         self.ohe = None
 
-        if self.handle_na or self.dataframe[self.cat_feats].isnull().values.any():
-            print(f"\n{Fore.YELLOW}There are Null Values in the DataSet or handle_na is set as True.{Style.RESET_ALL}")
+        if self.handle_na=="True" :#or self.dataframe[self.cat_feats].isnull().sum() > 0):
+            print(f"\nThere are Null Values in the DataSet or handle_na is set as True.")
             print("\nNull Values are as follows: \n",self.dataframe[self.cat_feats].isnull().sum())
-            print(f"{Fore.YELLOW}\nPlease handle na values separately or PRESS - Y or y to continue with standard procedure. {Style.RESET_ALL}")
+            #print(f"{Fore.YELLOW}\nPlease handle na values separately or PRESS - Y or y to continue with standard procedure. {Style.RESET_ALL}")
+            print("\nPlease handle na values separately or PRESS - Y or y to continue with standard procedure.")
             i=input("> ")
             if i not in ('Y','y'):
                 raise Warning("\nNan Values Found.\nExiting ...............")
@@ -81,10 +82,13 @@ class CategoricalFeatures:
         return self.output_dataframe
 
     def _one_hot(self):
+        self.output_dataframe = pd.get_dummies(data=self.dataframe, columns=self.cat_feats)
+        '''
         self.ohe = preprocessing.OneHotEncoder()
         self.ohe.fit(self.dataframe[self.cat_feats].values)
         self.output_dataframe = self.ohe.transform(self.dataframe[self.cat_feats].values)
         joblib.dump(self.ohe,f"{PATH}ohe_.pkl")
+        '''
         return self.output_dataframe
 
     def fit_transform(self):
@@ -113,11 +117,12 @@ if __name__ == "__main__":
     print("\nTrain Columns : \n", train.columns)
     #print("\nTest Columns : \n", test.columns)
     train_len = len(train)
-    df = pd.concat([train, test], axis=0,ignore_index=True)
+    #df = pd.concat([train, test], axis=0,ignore_index=True)
 
     #cols = [c for c in df.columns if c not in ["id", "target"]]
     ## Select categorical columns
     #cols = df.select_dtypes(include=['object']).columns.tolist()
+    '''
     print("Do you have an id column in your dataset ?")
     res = input("> Enter Y if you have an id varibale in your dataset.")
     if res=='Y' or res == 'y':
@@ -129,14 +134,15 @@ if __name__ == "__main__":
     res = input("> Enter y if you have a target variable in the dataset.")
     if res == 'Y' or res=='y':
         target = input("> Enter the name of the target variable.")
-        if target not in tarin.columns:
+        if target not in train.columns:
             raise "target variable name match Error.!"
         res=None
+    '''
     print("")
-    print(f"{Fore.GREEN}Identifying the Categorical variables ...{Style.RESET_ALL}")
-    cols = train.dtypes=='object'
-    cols = list(cols[cols].index)
-    cols = [c for c in cols if c not in [id, target]]
+    #print("Identifying the Categorical variables ...")
+    cat_cols = train.dtypes=='object'
+    cat_cols = list(cat_cols[cat_cols].index)
+    cat_cols = [c for c in cat_cols if c not in ("Policy_ID", "False_Flag")]
     '''
     try:
         cols.remove('id')
@@ -148,12 +154,13 @@ if __name__ == "__main__":
     except:
         print("Column target not Found in object Data Type")
     '''
-    cat_feats = CategoricalFeatures(dataframe=df,
-                                    categorical_features=cols,
+    cat_feats = CategoricalFeatures(dataframe=train,
+                                    categorical_features=cat_cols,
                                     encoding_type=TYPE,
-                                    handle_na=NA)
-    df = cat_feats.fit_transform()
-    
+                                    handle_na = NA)
+    df = pd.DataFrame(cat_feats.fit_transform())
+    #print("Type is ")
+    #print(type(df))
     train = df.iloc[ : train_len ,]
     #test = df.iloc[train_len :, ]
     ## Storing the Files .....
@@ -161,7 +168,7 @@ if __name__ == "__main__":
     #print("\nShape of Test : ",test.shape)
     print("Train Columns : \n", train.columns)
     #print("Test Columns : \n", test.columns)
-    train.to_csv(f"modified_{TRAINING_DATA[:-4]}.csv", index=False)
+    train.to_csv(f"{TRAINING_DATA[:-4]}.csv", index=False)
     #test.to_csv(f"{TESTING_DATA[:-4]}.csv", index=False)
-    joblib.dump(train.columns, f"{PATH}columns.pkl")
-    print(f"{Fore.GREEN}File Successfully Modified ...{Style.RESET_ALL}")
+    #joblib.dump(train.columns, f"{PATH}columns.pkl")
+    print("File Successfully Modified ...")

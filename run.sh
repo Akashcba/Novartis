@@ -1,5 +1,5 @@
-export TRAINING_DATA="Akashcba/Novartis/data/Novartis_Clean_Data.csv"
-#export MODEL_PATH="/Users/my_mac/Documents/Machine Learning/ML/models"
+export TRAINING_DATA="/content/Novartis/data/Novartis_Clean_Data.csv"
+export MODEL_PATH="/content/Novartis/models/"
 
 
 # - binary_classification
@@ -11,7 +11,8 @@ export TRAINING_DATA="Akashcba/Novartis/data/Novartis_Clean_Data.csv"
 
 # Cross Validation
 export PROBLEM_TYPE="binary_classification"
-export TARGET_COLS="False_Fold"
+export TARGET_COLS="False_Flag"
+export ID_COLS="Policy_ID"
 export LABEL_DELIMETER=" "
 export NUM_FOLDS="5"
 
@@ -26,13 +27,13 @@ export NA="False"
 export MODEL=$1
 
 
-python -m src.categorical
-python -m src.cross_validation
+#python3 -m src.categorical
+#python3 -m src.cross_validation
 
-FOLD=0 python -m src.train
-FOLD=2 python -m src.train
-FOLD=1 python -m src.train
-FOLD=3 python -m src.train
+FOLD=0 python3 -m src.train
+FOLD=2 python3 -m src.train
+FOLD=1 python3 -m src.train
+FOLD=3 python3 -m src.train
 FOLD=4 python -m src.train
 #FOLD=5 python -m src.train
 #FOLD=6 python -m src.train
