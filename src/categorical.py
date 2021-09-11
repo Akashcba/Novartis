@@ -16,7 +16,7 @@ TRAINING_DATA = os.environ.get("TRAINING_DATA")
 #TESTING_DATA = os.environ.get("TEST_DATA")
 TYPE = os.environ.get("TYPE")
 NA = os.environ.get("NA")
-PATH = os.environ.get("MODEL_PATH")
+#PATH = os.environ.get("MODEL_PATH")
 '''
 class Warning(Exception):
     def __init__(self, message):
@@ -62,7 +62,7 @@ class CategoricalFeatures:
             self.output_dataframe.loc[:, c] = lbl.transform(self.dataframe[c].values)
             self.label_encoders[c] = lbl
 
-        joblib.dump(self.label_encoders,f"{PATH}label_encoder.pkl")
+        #joblib.dump(self.label_encoders,f"{PATH}label_encoder.pkl")
         #TRAINING_DATA="/Users/my_mac/Documents/Machine Learning/ML/input/train_folds.csv"
         # for c,lbl in self.label_encoder.items():
         return self.output_dataframe
@@ -92,7 +92,6 @@ class CategoricalFeatures:
         return self.output_dataframe
 
     def fit_transform(self):
-        print()
         if self.enc_type == "label":
             print("Running label_encoding .......")
             return self._label_encoding()
@@ -100,7 +99,6 @@ class CategoricalFeatures:
             print("Running Binarization .......")
             return self._label_binarization()
         elif self.enc_type == "ohe":
-            print("Running One Hot Encoding ........")
             return self._one_hot()
         else:
             raise Warning("Encoding type not understood")
@@ -108,27 +106,17 @@ class CategoricalFeatures:
 
 
 if __name__ == "__main__":
-    print("\nExecuting The Encoding Module .........\n")
     time.sleep(7)
     train = pd.read_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv")
-    #test = pd.read_csv(TESTING_DATA)
-    print("\nShape of Train input : ", train.shape,"\n")
-    #print("Shape of Test : ",test.shape)
-    #print("\nTrain Columns : \n", train.columns)
-    #print("\nTest Columns : \n", test.columns)
-    train_len = len(train)
-    #df = pd.concat([train, test], axis=0,ignore_index=True)
 
-    #cols = [c for c in df.columns if c not in ["id", "target"]]
-    ## Select categorical columns
-    #cols = df.select_dtypes(include=['object']).columns.tolist()
-    
-    print("")
-    #print("Identifying the Categorical variables ...")
+    train_len = len(train)
+
     cat_cols = train.dtypes=='object'
     cat_cols = list(cat_cols[cat_cols].index)
     cat_cols = [c for c in cat_cols if c not in ("Policy_ID", "False_Flag")]
-    
+    if TYPE=="ohe":
+        print("Running One Hot Encoding ........")
+    print("\nShape of Train input : ", train.shape)
     cat_feats = CategoricalFeatures(dataframe=train,
                                     categorical_features=cat_cols,
                                     encoding_type=TYPE,
@@ -139,7 +127,7 @@ if __name__ == "__main__":
     train = df.iloc[ : train_len ,]
     #test = df.iloc[train_len :, ]
     ## Storing the Files .....
-    print("\nShape of Train After Categorical Encoding : ",train.shape, "\n")
+    print("Shape of Train After Categorical Encoding : ",train.shape)
     #print("\nShape of Test : ",test.shape)
     #print("Train Columns : \n", train.columns)
     #print("Test Columns : \n", test.columns)
