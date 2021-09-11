@@ -100,7 +100,7 @@ class CategoricalFeatures:
             print("Running Binarization .......")
             return self._label_binarization()
         elif self.enc_type == "ohe":
-            print("Running Ohe ........")
+            print("Running One Hot Encoding ........")
             return self._one_hot()
         else:
             raise Warning("Encoding type not understood")
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     #test = pd.read_csv(TESTING_DATA)
     print("Shape of Train input : ", train.shape)
     #print("Shape of Test : ",test.shape)
-    print("\nTrain Columns : \n", train.columns)
+    #print("\nTrain Columns : \n", train.columns)
     #print("\nTest Columns : \n", test.columns)
     train_len = len(train)
     #df = pd.concat([train, test], axis=0,ignore_index=True)
@@ -139,11 +139,11 @@ if __name__ == "__main__":
     train = df.iloc[ : train_len ,]
     #test = df.iloc[train_len :, ]
     ## Storing the Files .....
-    print("\nShape of Train : ",train.shape)
+    print("\nShape of Train After Categorical Encoding : ",train.shape)
     #print("\nShape of Test : ",test.shape)
-    print("Train Columns : \n", train.columns)
+    #print("Train Columns : \n", train.columns)
     #print("Test Columns : \n", test.columns)
     train.to_csv(f"{TRAINING_DATA[:-4]}.csv", index=False)
     #test.to_csv(f"{TESTING_DATA[:-4]}.csv", index=False)
     #joblib.dump(train.columns, f"{PATH}columns.pkl")
-    print("File Successfully Modified ...")
+    print("File Successfully Modified and saved...")

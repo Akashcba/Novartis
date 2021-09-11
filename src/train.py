@@ -51,10 +51,18 @@ if __name__ == "__main__":
     clf.fit(train_df, ytrain)
     #preds = clf.predict_proba(valid_df)[:, 1]
     preds = clf.predict(valid_df)#[:, 1]
-    #print(preds)
+    ## Only for lasso
+    if MODEL == "lasso":
+            for i in range(len(preds)):
+                if preds[i] >=0.5:
+                    preds[i]= 1
+                else:
+                    preds[i]= 0
+            #print(preds)
+    time.sleep(10)
     print("F1_Score on validation set : ", metrics.f1_score(yvalid, preds))
     print("AUC Score : ",metrics.roc_auc_score(yvalid, preds) )
 
     ## Storing the data for predict.py
-    print("Compeleted")
+    print("Training Compeleted")
     #joblib.dump(clf, f"/Users/my_mac/Documents/Machine Learning/ML/models/{MODEL}_{FOLD}.pkl")

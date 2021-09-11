@@ -95,7 +95,7 @@ if __name__ == "__main__":
     cv = CrossValidation(df, shuffle=True, num_folds=NUM_FOLDS, target_cols=TARGET_COLS, 
                          problem_type=PROBLEM_TYPE, multilabel_delimiter=LABEL_DELIMETER )
     df_split = cv.split()
-    print(df_split.head())
+    #print(df_split.head())
     print(df_split.kfold.value_counts())
     df_split.to_csv(f"{TRAINING_DATA[:-4]}.csv", index=False)
     print("File Successfully Modified ...")
