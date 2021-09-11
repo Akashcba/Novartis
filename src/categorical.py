@@ -40,7 +40,7 @@ class CategoricalFeatures:
         self.binary_encoders = dict()
         self.ohe = None
 
-        if self.handle_na=="True" :#or self.dataframe[self.cat_feats].isnull().sum() > 0):
+        if self.handle_na=="True" or self.dataframe[self.cat_feats].isnull().values.any():
             print(f"\nThere are Null Values in the DataSet or handle_na is set as True.")
             print("\nNull Values are as follows: \n",self.dataframe[self.cat_feats].isnull().sum())
             #print(f"{Fore.YELLOW}\nPlease handle na values separately or PRESS - Y or y to continue with standard procedure. {Style.RESET_ALL}")
@@ -82,7 +82,7 @@ class CategoricalFeatures:
         return self.output_dataframe
 
     def _one_hot(self):
-        self.output_dataframe = pd.get_dummies(data=self.dataframe, columns=self.cat_feats)
+        self.output_dataframe = pd.get_dummies(data=self.dataframe, columns=self.cat_feats, drop_first=True)
         '''
         self.ohe = preprocessing.OneHotEncoder()
         self.ohe.fit(self.dataframe[self.cat_feats].values)
@@ -122,38 +122,13 @@ if __name__ == "__main__":
     #cols = [c for c in df.columns if c not in ["id", "target"]]
     ## Select categorical columns
     #cols = df.select_dtypes(include=['object']).columns.tolist()
-    '''
-    print("Do you have an id column in your dataset ?")
-    res = input("> Enter Y if you have an id varibale in your dataset.")
-    if res=='Y' or res == 'y':
-        id = input("> Enter the name of the id variable.")
-        if id not in train.columns:
-            raise "id Varibale name match Error.!"
-        res=None
-    print("Do you have a target/response variable in the dataset ?")
-    res = input("> Enter y if you have a target variable in the dataset.")
-    if res == 'Y' or res=='y':
-        target = input("> Enter the name of the target variable.")
-        if target not in train.columns:
-            raise "target variable name match Error.!"
-        res=None
-    '''
+    
     print("")
     #print("Identifying the Categorical variables ...")
     cat_cols = train.dtypes=='object'
     cat_cols = list(cat_cols[cat_cols].index)
     cat_cols = [c for c in cat_cols if c not in ("Policy_ID", "False_Flag")]
-    '''
-    try:
-        cols.remove('id')
-    except:
-        print("\nColumn id not Found in object Data Type")
-    print(f"{Fore.GREEN}\nProcessing .........{Style.RESET_ALL}\n")
-    try:
-        cols.remove('target')
-    except:
-        print("Column target not Found in object Data Type")
-    '''
+    
     cat_feats = CategoricalFeatures(dataframe=train,
                                     categorical_features=cat_cols,
                                     encoding_type=TYPE,
