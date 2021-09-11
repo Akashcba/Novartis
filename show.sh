@@ -1,23 +1,44 @@
 #!/bin/bash
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-BOLD=$(tput bold)
-NORM=$(tput sgr0) # Normal
+#RED= '\u001B[31m'
+#NC='\033[0m' # No Color
+#BOLD=$(tput bold)
+#NORM=$(tput sgr0) # Normal
 
 uname -a
 
-echo -e "${RED}${BOLD}The Show is going to Start.!${NC}${NORM}"
-echo -e "${RED}@Author: Akash Choudhary${NC}"
+printf "The Show is going to Start.!$"
+echo -e "@Author: Akash Choudhary"
 echo " "
-sh warm.sh
-echo "${RED}${BOLD}Training the Model : RandomForest${NC}${NORM}"
+FILES=""
+#FILES="${FILES} Data_Sig"
+#FILES="${FILES} Data_Sig_mod"
+FILES="${FILES} Data"
+for FILE in ${FILES}; do
+    export TRAINING_DATA=${FILE};
+    export PROBLEM_TYPE="binary_classification"
+    export TARGET_COLS="SIU_Referral_Flag"
+    export LABEL_DELIMETER=" "
+    export NUM_FOLDS="5"
+    export TYPE="ohe" # Categorical Encoding ....
+    # Are there NA values in dataset -> False : No NA values
+    export NA="False"
+    ## Encode the data
+    echo -e "Performing Categorical Encoding\n"
+    python3 -m src.categorical
+    ## Perform cross validation
+    echo -e "Performing Cross Validation\n"
+    python3 -m src.cross_validation
+    done
+echo "Training the Model : RandomForest"
 sh run.sh randomforest
-echo "${RED}${BOLD}Training the Model : Logistic Regression${NC}${NORM}"
+echo "Training the Model : Logistic Regression"
 sh run.sh lr
-echo "${RED}${BOLD}Training the Model : Naive Bayes${NC}${NORM}"
+echo "Training the Model : Naive Bayes"
 sh run.sh gnb
-echo "${RED}${BOLD}Training the Model : XGBoost${NC}${NORM}"
+echo "Training the Model : XGBoost"
 sh run.sh xgb
-echo "${RED}${BOLD}Training the Model : KNN${NC}${NORM}"
+echo "Training the Model : Logistic Regression"
+sh run.sh svm
+echo "Training the Model : KNN"
 sh run.sh knn
-echo -e "${RED}${BOLD}Game Over!!${NC}${NORM}" # Ends
+echo -e "Game Over!!" # Ends
