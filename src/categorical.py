@@ -108,11 +108,11 @@ class CategoricalFeatures:
 
 
 if __name__ == "__main__":
-    print("\nExecuting The Encoding Module .........")
+    print("\nExecuting The Encoding Module .........\n")
     time.sleep(7)
-    train = pd.read_csv(TRAINING_DATA)
+    train = pd.read_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv")
     #test = pd.read_csv(TESTING_DATA)
-    print("Shape of Train input : ", train.shape)
+    print("\nShape of Train input : ", train.shape,"\n")
     #print("Shape of Test : ",test.shape)
     #print("\nTrain Columns : \n", train.columns)
     #print("\nTest Columns : \n", test.columns)
@@ -139,11 +139,11 @@ if __name__ == "__main__":
     train = df.iloc[ : train_len ,]
     #test = df.iloc[train_len :, ]
     ## Storing the Files .....
-    print("\nShape of Train After Categorical Encoding : ",train.shape)
+    print("\nShape of Train After Categorical Encoding : ",train.shape, "\n")
     #print("\nShape of Test : ",test.shape)
     #print("Train Columns : \n", train.columns)
     #print("Test Columns : \n", test.columns)
-    train.to_csv(f"{TRAINING_DATA[:-4]}.csv", index=False)
+    train.to_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv", index=False)
     #test.to_csv(f"{TESTING_DATA[:-4]}.csv", index=False)
     #joblib.dump(train.columns, f"{PATH}columns.pkl")
-    print("File Successfully Modified and saved...")
+    print("\nFile Successfully Modified and saved...\n")

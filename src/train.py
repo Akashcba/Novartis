@@ -27,9 +27,9 @@ Fold_Mapping = {
 }
 
 if __name__ == "__main__":
-    print("\nExecuting the Train Module")
+    print("\nExecuting the Train Module\n")
     time.sleep(1)
-    df = pd.read_csv(TRAINING_DATA)
+    df = pd.read_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv")
     #df_test = pd.read_csv(TEST_DATA)
     train_df = df[df.kfold.isin(Fold_Mapping.get(FOLD))].reset_index(drop=True)
     valid_df = df[df.kfold==FOLD].reset_index(drop=True)
@@ -60,9 +60,9 @@ if __name__ == "__main__":
                     preds[i]= 0
             #print(preds)
     time.sleep(10)
-    print("F1_Score on validation set : ", metrics.f1_score(yvalid, preds))
-    print("AUC Score : ",metrics.roc_auc_score(yvalid, preds) )
+    print("\nF1_Score on validation set : ", metrics.f1_score(yvalid, preds))
+    print("AUC Score : ",metrics.roc_auc_score(yvalid, preds),"\n")
 
     ## Storing the data for predict.py
-    print("Training Compeleted")
+    print("\nTraining Compeleted\n")
     #joblib.dump(clf, f"/Users/my_mac/Documents/Machine Learning/ML/models/{MODEL}_{FOLD}.pkl")

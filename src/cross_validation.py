@@ -87,9 +87,9 @@ class CrossValidation:
         return self.dataframe
 
 if __name__ == "__main__":
-    print("\nExecuting the Cross_Val Module.")
+    print("\nExecuting the Cross_Val Module.\n")
     time.sleep(7)
-    df = pd.read_csv(TRAINING_DATA)
+    df = pd.read_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv")
 #    print(TARGET_COLS, len(TARGET_COLS))
 #    print(PROBLEM_TYPE)
     cv = CrossValidation(df, shuffle=True, num_folds=NUM_FOLDS, target_cols=TARGET_COLS, 
@@ -97,5 +97,6 @@ if __name__ == "__main__":
     df_split = cv.split()
     #print(df_split.head())
     print(df_split.kfold.value_counts())
-    df_split.to_csv(f"{TRAINING_DATA[:-4]}.csv", index=False)
-    print("File Successfully Modified ...")
+    print("")
+    df_split.to_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv", index=False)
+    print("File Successfully Modified ...\n")
