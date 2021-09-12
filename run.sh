@@ -1,5 +1,6 @@
-export TRAINING_DATA="Data"
+export TRAINING_DATA="Final_Data"
 export TARGET_COLS="SIU_Referral_Flag"
+export ID_COLS="Policy_ID"
 export MODEL=$1
 FOLD=0 python3 -m src.train
 FOLD=1 python3 -m src.train

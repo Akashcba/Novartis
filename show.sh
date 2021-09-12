@@ -12,7 +12,7 @@ echo " "
 FILES=""
 #FILES="${FILES} Data_Sig"
 #FILES="${FILES} Data_Sig_mod"
-FILES="${FILES} Data"
+FILES="${FILES} Final_Data"
 for FILE in ${FILES}; do
     export TRAINING_DATA=${FILE};
     export PROBLEM_TYPE="binary_classification"

@@ -89,7 +89,7 @@ class CrossValidation:
 if __name__ == "__main__":
     print("Fold\tCount")
     time.sleep(7)
-    df = pd.read_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv")
+    df = pd.read_csv(f"/content/Novartis/data/{TRAINING_DATA}_encoded.csv")
 #    print(TARGET_COLS, len(TARGET_COLS))
 #    print(PROBLEM_TYPE)
     cv = CrossValidation(df, shuffle=True, num_folds=NUM_FOLDS, target_cols=TARGET_COLS, 
@@ -97,5 +97,5 @@ if __name__ == "__main__":
     df_split = cv.split()
     #print(df_split.head())
     print(df_split.kfold.value_counts())
-    df_split.to_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv", index=False)
+    df_split.to_csv(f"/content/Novartis/data/{TRAINING_DATA}_encoded_folds.csv", index=False)
     print("\nFile Successfully Modified ...\n")

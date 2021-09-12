@@ -113,7 +113,7 @@ if __name__ == "__main__":
 
     cat_cols = train.dtypes=='object'
     cat_cols = list(cat_cols[cat_cols].index)
-    cat_cols = [c for c in cat_cols if c not in ("Policy_ID", "False_Flag")]
+    cat_cols = [c for c in cat_cols if c not in ("Policy_ID", "SIU_Referral_Flag")]
     if TYPE=="ohe":
         print("Running One Hot Encoding ........")
     print("\nShape of Train input : ", train.shape)
@@ -131,7 +131,7 @@ if __name__ == "__main__":
     #print("\nShape of Test : ",test.shape)
     #print("Train Columns : \n", train.columns)
     #print("Test Columns : \n", test.columns)
-    train.to_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv", index=False)
+    train.to_csv(f"/content/Novartis/data/{TRAINING_DATA}_encoded.csv", index=False)
     #test.to_csv(f"{TESTING_DATA[:-4]}.csv", index=False)
     #joblib.dump(train.columns, f"{PATH}columns.pkl")
     print("\nFile Successfully Modified and saved...\n")

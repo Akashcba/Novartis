@@ -13,7 +13,7 @@ TRAINING_DATA = os.environ.get("TRAINING_DATA")
 #TEST_DATA = os.environ.get("TEST_DATA")
 FOLD = int(os.environ.get("FOLD"))
 target = os.environ.get("TARGET_COLS")
-#id = os.environ.get("ID_COLS")
+id = os.environ.get("ID_COLS")
 MODEL = os.environ.get("MODEL")
 
 Fold_Mapping = {
@@ -28,7 +28,7 @@ Fold_Mapping = {
 
 if __name__ == "__main__":
     time.sleep(1)
-    df = pd.read_csv(f"/content/Novartis/data/{TRAINING_DATA}.csv")
+    df = pd.read_csv(f"/content/Novartis/data/{TRAINING_DATA}_encoded_folds.csv")
     #df_test = pd.read_csv(TEST_DATA)
     train_df = df[df.kfold.isin(Fold_Mapping.get(FOLD))].reset_index(drop=True)
     valid_df = df[df.kfold==FOLD].reset_index(drop=True)
@@ -36,10 +36,10 @@ if __name__ == "__main__":
     ytrain = train_df[target].values
     yvalid = valid_df[target].values
 
-    #train_df = train_df.drop([id, target, "kfold"], axis=1)
-    train_df = train_df.drop([target, "kfold"], axis=1)
-    #valid_df = valid_df.drop([id, target, "kfold"], axis=1)
-    valid_df = valid_df.drop([target, "kfold"], axis=1)
+    train_df = train_df.drop([id, target, "kfold"], axis=1)
+    #train_df = train_df.drop([target, "kfold"], axis=1)
+    valid_df = valid_df.drop([id, target, "kfold"], axis=1)
+    #valid_df = valid_df.drop([target, "kfold"], axis=1)
 
     print("Training Fold : ", FOLD)
 
